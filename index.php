@@ -77,10 +77,7 @@ add_image_size('hue_gallery_thumbnail', 150, 150, false);
 
 add_action( 'admin_enqueue_scripts', 'hue_gallery_admin_scripts' );
 function hue_gallery_admin_scripts() {
-	wp_enqueue_script( 'jquery-ui' );
-	// wp_enqueue_script( hue_gallery_prefix('jquery-ui'), plugins_url('/_/js/jquery-ui-1.10.3.custom.min.js', __FILE__), array( 'jquery' ) );
 	wp_enqueue_script( hue_gallery_prefix('admin'), plugins_url('/_/js/admin.js', __FILE__), array( 'jquery' ) );
-	
 	wp_enqueue_style( hue_gallery_prefix('admin'), plugins_url('/_/css/admin.css', __FILE__) );
 }
 
