@@ -12,7 +12,7 @@ License: GPL2
 define( 'HUE_GALLERY_PREFIX', 'hue_gallery' );
 hue_gallery_define( 'PUGIN_NAME', '100und1 Gallery' );
 hue_gallery_define( 'PLUGIN_DIRECTORY', 'hue-gallery');
-hue_gallery_define( 'CURRENT_VERSION', '05/2013');
+hue_gallery_define( 'CURRENT_VERSION', '08/2013');
 
 hue_gallery_define( 'DEBUG', false);		# never use debug mode on productive systems
 
@@ -56,8 +56,40 @@ function hue_gallery_uninstall() {
 
 function hue_gallery_create_menu() {
 	 //or create settings menu page
-	add_options_page(__('100und1 Gallery', HUE_GALLERY_PREFIX), __("100und1 Gallery", HUE_GALLERY_PREFIX), 9,  HUE_GALLERY_PLUGIN_DIRECTORY.'/settings_page.php');
+	add_options_page(__('100und1 Gallery', HUE_GALLERY_PREFIX), __("100und1 Gallery", HUE_GALLERY_PREFIX), 9,  'gallery-settings', 'hue_gallery_settings_page');
 
+}
+
+function hue_gallery_settings_page() {
+?>
+<div class="wrap">
+<h2><?php print HUE_GALLERY_PUGIN_NAME . " (" . HUE_GALLERY_CURRENT_VERSION . ")" ?></h2>
+
+<form method="post" action="options.php">
+	<p>Adds a gallery metabox to your post types. Add images using the nativ Wordpress uploader/media library and use drag &amp; drop to reorder.</p>
+	<p>Use the template tag <code>hue_gallery_ids($post_id)</code> to retrieve an array of image attachment ids for a specific gallery (<code>$post_id</code> is the id of the post the gallery is attached to).</p>
+    <?php
+		settings_fields( 'hue_gallery_settings-group' );
+	?>
+	<h3>Options</h3>
+    <table class="form-table">
+	    <tr valign="top">
+	    <th scope="row">Title</th>
+	    <td><input type="text" name="hue_gallery_title" value="<?php echo get_option('hue_gallery_title'); ?>" /></td>
+	    </tr>
+	    
+        <tr valign="top">
+        <th scope="row">Post Types</th>
+        <td><input type="text" name="hue_gallery_post_types" value="<?php echo get_option('hue_gallery_post_types'); ?>" /></td>
+        </tr>
+    </table>
+    
+    <p class="submit">
+    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+    </p>
+</form>
+</div>
+<?php
 }
 
 function hue_gallery_register_settings() {
@@ -113,7 +145,13 @@ function hue_render_gallery_item($id) {
 	return $out;
 }
 
-function hue_render_gallery_items($ids) {
+/* Render all gallery items of current post; optional parameter: array of attachment ids */
+function hue_render_gallery_items() {
+	if ( func_num_args() == 0) {
+		$ids = hue_gallery_ids();
+	} else {
+		$ids = func_get_arg(0);
+	}
 	$out = '';
 	foreach ($ids as $id) {
 		$out .= hue_render_gallery_item($id);
@@ -179,8 +217,13 @@ function hue_ajax_get_thumbnails() {
 }
 
 
-/* get an array of gallery image ids for a post */
-function hue_gallery_ids($post_id) {
+/* get an array of gallery image ids for current post. optional parameter: specific post ID */
+function hue_gallery_ids() {
+	if ( func_num_args() == 0) {
+		$post_id = get_the_ID();
+	} else {
+		$post_id = func_get_arg(0);
+	}
 	$att_ids_json = get_post_meta( $post_id, '_hue_gallery', true ); // it's a json string
 	if (empty($att_ids_json)) $att_ids_json = '[]'; // default to empty list
 	$att_ids = json_decode($att_ids_json);
