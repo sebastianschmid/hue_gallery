@@ -1,8 +1,8 @@
 #hue_gallery .thumbnails { overflow:auto; position:relative; }
 #hue_gallery .thumbnails img { display:inline-block; vertical-align:middle; }
-#hue_gallery .thumbnails .thumbnail { width:150px; height:150px; background-color:black;  line-height:150px; text-align:center;
+#hue_gallery .thumbnails .thumbnail { width:150px; height:150px; background-color:black; line-height:147px; text-align:center;
 	position:relative; display:block; float:left;
-	margin: 0 10px 10px 0; cursor:move; outline:1px solid lightgray; overflow:hidden; }
+	margin: 0 10px 10px 0; cursor:move; border:1px solid lightgray; overflow:hidden; }
 #hue_gallery .thumbnails .thumbnail .remove { position:absolute; width:20px; height:20px; top:0; right:0; background-color:rgba(255,255,255,0.8); line-height:20px; vertical-align:middle; text-align:center; opacity:0; border:1px solid lightgray; font-weight:bold; font-size: 20px;
 }
 #hue_gallery .thumbnails .thumbnail .remove:hover { cursor:pointer; }
