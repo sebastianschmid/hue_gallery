@@ -2,8 +2,8 @@
 /*
 Plugin Name: 100und1 Gallery
 Plugin URI: http://100und1.com
-Description: Adds a gallery metabox to your post types. Add images using the Wordpress uploader and use drag&drop to reorder.
-Version: 05/2013
+Description: Adds a gallery metabox to your post types. Add images using the Wordpress uploader and use drag & drop to reorder.
+Version: 12/2013
 Author: Martin Grödl
 Author URI: mailto:martin.groedl@100und1.com
 License: GPL2
@@ -12,7 +12,7 @@ License: GPL2
 define( 'HUE_GALLERY_PREFIX', 'hue_gallery' );
 hue_gallery_define( 'PUGIN_NAME', '100und1 Gallery' );
 hue_gallery_define( 'PLUGIN_DIRECTORY', 'hue-gallery');
-hue_gallery_define( 'CURRENT_VERSION', '08/2013');
+hue_gallery_define( 'CURRENT_VERSION', '12/2013');
 
 hue_gallery_define( 'DEBUG', false);		# never use debug mode on productive systems
 
@@ -67,7 +67,7 @@ function hue_gallery_settings_page() {
 
 <form method="post" action="options.php">
 	<p>Adds a gallery metabox to your post types. Add images using the nativ Wordpress uploader/media library and use drag &amp; drop to reorder.</p>
-	<p>Use the template tag <code>hue_gallery_ids($post_id)</code> to retrieve an array of image attachment ids for a specific gallery (<code>$post_id</code> is the id of the post the gallery is attached to).</p>
+	<p>Use the template tag <code>hue_gallery_ids($post_id)</code> to retrieve an array of image attachment ids for a specific gallery. <code>$post_id</code> is the id of the post the gallery is attached to. Uses the current post, if omitted.</p>
     <?php
 		settings_fields( 'hue_gallery_settings-group' );
 	?>
@@ -111,6 +111,7 @@ add_action( 'admin_enqueue_scripts', 'hue_gallery_admin_scripts' );
 function hue_gallery_admin_scripts() {
 	wp_enqueue_script( hue_gallery_prefix('admin'), plugins_url('/_/js/admin.js', __FILE__), array( 'jquery' ) );
 	wp_enqueue_style( hue_gallery_prefix('admin'), plugins_url('/_/css/admin.css', __FILE__) );
+	wp_enqueue_media(); // add wp.media scripts
 }
 
 
