@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: 100und1 Gallery
-Plugin URI: http://100und1.com
+Plugin URI: http://process.studio
 Description: Adds a gallery metabox to your post types. Add images using the Wordpress uploader and use drag & drop to reorder.
-Version: 12/2013
+Version: 02/2016
 Author: Martin Grödl
-Author URI: mailto:martin.groedl@100und1.com
+Author URI: mailto:martin@process.studio
 License: GPL2
 */
 
@@ -77,13 +77,13 @@ function hue_gallery_settings_page() {
 	    <th scope="row">Title</th>
 	    <td><input type="text" name="hue_gallery_title" value="<?php echo get_option('hue_gallery_title'); ?>" /></td>
 	    </tr>
-	    
+
         <tr valign="top">
         <th scope="row">Post Types</th>
         <td><input type="text" name="hue_gallery_post_types" value="<?php echo get_option('hue_gallery_post_types'); ?>" /></td>
         </tr>
     </table>
-    
+
     <p class="submit">
     <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
     </p>
@@ -165,24 +165,24 @@ function hue_gallery_content( $post ) {
 	// Use nonce for verification
 
 	wp_nonce_field( plugin_basename( __FILE__ ), 'hue_gallerynonce' );
-	
+
 	// get att id's from post meta
 	$att_ids_json = get_post_meta( $post->ID, '_hue_gallery', true ); // it's a json string
 	//$att_ids_json = '[4,5,6,49]';
 	if (empty($att_ids_json)) $att_ids_json = '[]'; // default to empty list
 	$att_ids = json_decode($att_ids_json);
-	
+
 	echo '<div class="thumbnails">';
 	echo hue_render_gallery_items($att_ids);
-	
+
 	echo '</div>';
 	echo '<input type="hidden" class="att_ids" name="gallery_att_ids" value="'.$att_ids_json.'"></input>'; // this holds a JSON string of image attachment ids
 	echo '<input type="button" class="button" value="Add Images"></input>';
 }
 
 /* When the post is saved, saves our custom data */
-function hue_gallery_save( $post_id ) {	
-	// First we need to check if the current user is authorised to do this action. 
+function hue_gallery_save( $post_id ) {
+	// First we need to check if the current user is authorised to do this action.
 	if ( 'page' == $_POST['post_type'] ) {
 	if ( ! current_user_can( 'edit_page', $post_id ) )
 	    return;
@@ -190,11 +190,11 @@ function hue_gallery_save( $post_id ) {
 	if ( ! current_user_can( 'edit_post', $post_id ) )
 	    return;
 	}
-	
+
 	// Secondly we need to check if the user intended to change this value.
 	if ( ! isset( $_POST['hue_gallerynonce'] ) || ! wp_verify_nonce( $_POST['hue_gallerynonce'], plugin_basename( __FILE__ ) ) )
 	  return;
-	  
+
 	// save data
 	$data = $_POST['gallery_att_ids'];
 	update_post_meta($post_id, '_hue_gallery', $data);
@@ -209,7 +209,7 @@ function hue_ajax_get_thumbnails() {
 
 	$att_ids_json = $_POST['gallery_att_ids']; // json array of att ids
 	if ( empty($att_ids_json) ) die();
-	
+
 	$att_ids = json_decode($att_ids_json);
 	//response
 	header("Content-type: text/html");
